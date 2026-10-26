@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.4.0",
-    "generatedAt": "2026-10-26T08:49:07.381025878Z",
+    "version": "1.5.0",
+    "generatedAt": "2026-10-26T08:49:57.506764155Z",
     "templateType": "trip_c",
     "propertyId": "83604101-30ec-4c50-87ae-f4062746cd57",
     "homepageId": "881377d9-3fd5-42fe-b42f-839bd310a785"
@@ -29,6 +29,9 @@
     "domain": "arviewpoolvilla.com",
     "realtimeBookingId": "https://www.bookingplay.co.kr/partner/item/6332/calendar_main/",
     "ybsId": "74405",
+    "tripPropertyId": "6332",
+    "partnerType": "sales_agency",
+    "tripProviderName": "트립일레븐",
     "amenities": [
       "주차장",
       "흡연구역(지정장소)"
@@ -455,10 +458,7 @@
         "surrounding": [ ],
         "commonArea": [ ]
       }
-    ],
-    "tripPropertyId": "6332",
-    "partnerType": "sales_agency",
-    "tripProviderName": "트립일레븐"
+    ]
   },
   "rooms": [
     {
@@ -2548,9 +2548,9 @@
       },
       "theme": {
         "font": {
+          "koMain": null,
           "koSub": null,
-          "enMain": null,
-          "koMain": null
+          "enMain": null
         },
         "color": null
       },

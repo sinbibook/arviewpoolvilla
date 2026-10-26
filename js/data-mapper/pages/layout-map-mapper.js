@@ -30,12 +30,9 @@
   LayoutMapMapper.prototype.constructor = LayoutMapMapper;
 
   LayoutMapMapper.prototype.mapPage = function () {
-    // enabled=false이면 404로 리다이렉트
-    var pages = this.getPages();
-    if (!pages.layoutMap ||
-        !pages.layoutMap.sections ||
-        !pages.layoutMap.sections[0] ||
-        pages.layoutMap.sections[0].enabled === false) {
+    // enabled=false (또는 섹션 자체가 없음) 이면 404로 리다이렉트.
+    // 헤더 "미리보기" 링크 / room.html 객실 탭 "미리보기" 도 같은 기준(isLayoutMapEnabled)으로 숨긴다.
+    if (!this.isLayoutMapEnabled()) {
       window.location.href = '404.html';
       return;
     }
@@ -182,34 +179,28 @@
     if (!roomtypes.length) return;
 
     var self = this;
+    // Room Preview 카드는 groupName 과 무관하게 **항상 전체 객실**을 깐다.
+    // 그룹으로 접히는 곳은 헤더 ROOMS 메뉴와 객실 상세 탭뿐이고,
+    // 카드는 저마다 자기 객실 상세로 연결한다.
     roomtypes.forEach(function (rt) {
-      if (!rt.name || !rt.name.trim()) return;
-      var thumbUrl = self.getFirstSelectedImage(
-        (rt.images || []).filter(function (img) {
-          return img.category === 'roomtype_thumbnail';
-        })
-      );
-      var matched = rooms.filter(function (r) {
-        return r.id === rt.id;
-      })[0];
+      var roomLabel = (rt && rt.name) || '';
+      if (!String(roomLabel).trim() || !rt) return;
+      var thumbUrl = self.getFirstSelectedImage((rt.images || []).filter(function (img) { return img.category === 'roomtype_thumbnail'; }));
+      var matched = rooms.filter(function (r) { return r.id === rt.id; })[0];
 
       var div = document.createElement('div');
       div.className = 'swiper-slide';
-      div.setAttribute('data-title', rt.name || '');
+      div.setAttribute('data-title', roomLabel);
 
       var img = document.createElement('img');
-      if (thumbUrl) {
-        img.src = thumbUrl;
-      } else {
-        ImageHelpers.applyPlaceholder(img);
-      }
-      img.alt = rt.name || '';
+      if (thumbUrl) { img.src = thumbUrl; } else { ImageHelpers.applyPlaceholder(img); }
+      img.alt = roomLabel;
 
       var a = document.createElement('a');
-      a.href = 'room.html?id=' + rt.id;
+      a.href = self.getRoomMenuLink(rt, 'id');
       a.className = 'tx';
       a.innerHTML =
-        '<div class="tx1">' + (rt.name || '') + '</div>' +
+        '<div class="tx1">' + roomLabel + '</div>' +
         '<div class="tx2">' + buildRoomStructure(matched) + '</div>' +
         '<div class="more"></div>';
 
